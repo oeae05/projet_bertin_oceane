@@ -1,0 +1,6 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    { "name": "exercice1", "runtimeExecutable": "npm", "runtimeArgs": ["--prefix", "exercice1", "start"], "port": 4200 }
+  ]
+}

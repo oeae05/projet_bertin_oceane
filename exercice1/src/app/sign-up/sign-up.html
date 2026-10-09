@@ -1,0 +1,35 @@
+<section class="carte">
+  <aside class="intro">
+    <h1>Crée ton compte</h1>
+    <p>Remplis le formulaire pour t'inscrire.</p>
+  </aside>
+
+  <form #signUpForm="ngForm" (ngSubmit)="onSubmit(signUpForm)" novalidate>
+    <h2>Inscription</h2>
+
+    <app-champs name="login" label="Login" [type]="EType.TEXT" [(value)]="user.login" />
+
+    <div class="ligne">
+      <app-champs name="nom" label="Nom" [type]="EType.TEXT" [(value)]="user.nom" />
+      <app-champs name="prenom" label="Prénom" [type]="EType.TEXT" [(value)]="user.prenom" />
+    </div>
+
+    <app-champs name="email" label="Email" [type]="EType.EMAIL" [(value)]="user.email" />
+
+    <app-champs name="motDePasse" label="Mot de passe" [type]="EType.PASSWORD" [(value)]="user.motDePasse" />
+    <app-champs
+      name="confirmation"
+      label="Confirmation du mot de passe"
+      [type]="EType.PASSWORD"
+      [(value)]="user.confirmation"
+    />
+
+    @if (motsDePasseDifferents) {
+      <p class="erreur">Les mots de passe ne correspondent pas</p>
+    }
+
+    <button type="submit" [disabled]="signUpForm.invalid || motsDePasseDifferents">
+      S'inscrire
+    </button>
+  </form>
+</section>
