@@ -1,0 +1,103 @@
+.carte {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  width: min(900px, 100%);
+  background: var(--creme-clair);
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(242, 87, 43, 0.15);
+}
+
+.intro {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+  padding: 40px;
+  background: var(--orange);
+  color: var(--creme-clair);
+}
+
+h1 {
+  margin: 0;
+  font-size: 2.4rem;
+  line-height: 1.1;
+}
+
+.intro p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 40px;
+}
+
+h2 {
+  margin: 0 0 8px;
+  font-size: 1.8rem;
+  color: var(--orange);
+}
+
+.ligne {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.erreur {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--rose-fonce);
+}
+
+button {
+  margin-top: 8px;
+  padding: 14px;
+  border: none;
+  border-radius: 999px;
+  background: var(--orange);
+  color: #fff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+button:hover:not(:disabled) {
+  background: var(--rose-fonce);
+}
+
+button:disabled {
+  background: var(--peche);
+  cursor: not-allowed;
+}
+
+@media (max-width: 720px) {
+  .carte {
+    grid-template-columns: 1fr;
+  }
+
+  .intro,
+  form {
+    padding: 24px;
+  }
+
+  .ligne {
+    grid-template-columns: 1fr;
+  }
+}
+
+.bascule {
+  margin: 0;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.bascule a {
+  color: var(--rose-fonce);
+  font-weight: 700;
+}

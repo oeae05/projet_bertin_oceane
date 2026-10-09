@@ -1,0 +1,26 @@
+:root {
+  --orange: #f2572b;
+  --rose: #f07aa8;
+  --rose-clair: #fbc6d8;
+  --rose-fonce: #d9366f;
+  --peche: #f6b89c;
+  --peche-clair: #fde3d4;
+  --creme: #f8ebdc;
+  --creme-clair: #fff8f0;
+  --texte: #3a2a22;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px 16px;
+  background: var(--creme);
+  font-family: 'Poppins', sans-serif;
+  color: var(--texte);
+}

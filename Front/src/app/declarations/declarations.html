@@ -1,0 +1,19 @@
+<header>
+  <p>
+    Bonjour <strong>{{ auth.utilisateur()?.prenom }} {{ auth.utilisateur()?.nom }}</strong>
+  </p>
+  <button type="button" (click)="deconnecter()">Se déconnecter</button>
+</header>
+
+@if (selection(); as d) {
+  <app-pollution-recap [pollution]="d" [message]="message()" (nouvelle)="nouvelleDeclaration()" />
+} @else {
+  <app-pollution-form (declarer)="onDeclaration($event)" />
+}
+
+<app-mes-declarations
+  [declarations]="pollutions.mesDeclarations()"
+  [selection]="selection()?.id ?? null"
+  (voir)="voir($event)"
+  (supprimer)="supprimer($event)"
+/>
