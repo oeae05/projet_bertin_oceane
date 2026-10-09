@@ -1,6 +1,7 @@
 {
   "version": "0.0.1",
   "configurations": [
-    { "name": "exercice1", "runtimeExecutable": "npm", "runtimeArgs": ["--prefix", "exercice1", "start"], "port": 4200 }
+    { "name": "exercice1", "runtimeExecutable": "npm", "runtimeArgs": ["--prefix", "exercice1", "start"], "port": 4200 },
+    { "name": "front", "runtimeExecutable": "npm", "runtimeArgs": ["--prefix", "Front", "start", "--", "--port", "4201"], "port": 4201 }
   ]
 }
