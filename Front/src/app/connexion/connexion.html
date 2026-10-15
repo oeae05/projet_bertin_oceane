@@ -19,7 +19,9 @@
       <p class="erreur">{{ erreur() }}</p>
     }
 
-    <button type="submit" [disabled]="connexionForm.invalid">Se connecter</button>
+    <button type="submit" [disabled]="connexionForm.invalid || enCours()">
+      {{ enCours() ? 'Connexion…' : 'Se connecter' }}
+    </button>
 
     <p class="bascule">Pas encore de compte ? <a routerLink="/inscription">S'inscrire</a></p>
   </form>

@@ -31,8 +31,8 @@
       <p class="erreur">{{ erreurServeur() }}</p>
     }
 
-    <button type="submit" [disabled]="signUpForm.invalid || motsDePasseDifferents">
-      S'inscrire
+    <button type="submit" [disabled]="signUpForm.invalid || motsDePasseDifferents || enCours()">
+      {{ enCours() ? 'Inscription…' : "S'inscrire" }}
     </button>
 
     <p class="bascule">Déjà un compte ? <a routerLink="/connexion">Se connecter</a></p>
