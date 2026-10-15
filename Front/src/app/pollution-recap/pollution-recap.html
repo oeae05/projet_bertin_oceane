@@ -1,0 +1,63 @@
+<section class="carte">
+  <header class="entete">
+    <span class="badge">{{ pollution.type }}</span>
+    <h1>{{ pollution.titre }}</h1>
+    <p>{{ message }}</p>
+  </header>
+
+  <div class="contenu" [class.avec-photo]="pollution.photoUrl && !photoEnErreur()">
+    @if (pollution.photoUrl && !photoEnErreur()) {
+      <img
+        class="photo"
+        [src]="pollution.photoUrl"
+        [alt]="'Photo : ' + pollution.titre"
+        (error)="photoEnErreur.set(true)"
+      />
+    }
+
+    <dl>
+      <div class="info">
+        <dt>Date de l'observation</dt>
+        <dd>{{ pollution.dateObservation | date: 'longDate' }}</dd>
+      </div>
+      <div class="info">
+        <dt>Lieu</dt>
+        <dd>{{ pollution.lieu }}</dd>
+      </div>
+      <div class="info">
+        <dt>Latitude</dt>
+        <dd>{{ pollution.latitude | number: '1.0-6' }}</dd>
+      </div>
+      <div class="info">
+        <dt>Longitude</dt>
+        <dd>{{ pollution.longitude | number: '1.0-6' }}</dd>
+      </div>
+      <div class="info large">
+        <dt>Description</dt>
+        <dd class="description">{{ pollution.description }}</dd>
+      </div>
+      @if (pollution.photoUrl) {
+        <div class="info large">
+          <dt>Photo (URL)</dt>
+          <dd>
+            <a [href]="pollution.photoUrl" target="_blank" rel="noopener">{{ pollution.photoUrl }}</a>
+            @if (photoEnErreur()) {
+              <span class="erreur">Image impossible à charger</span>
+            }
+          </dd>
+        </div>
+      }
+    </dl>
+  </div>
+
+  <app-carte
+    class="carte-position"
+    [latitude]="pollution.latitude"
+    [longitude]="pollution.longitude"
+    [titre]="'Position de : ' + pollution.titre"
+  />
+
+  <footer>
+    <button type="button" (click)="nouvelle.emit()">Nouvelle déclaration</button>
+  </footer>
+</section>

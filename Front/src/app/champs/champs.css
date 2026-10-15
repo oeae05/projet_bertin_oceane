@@ -1,0 +1,44 @@
+:host {
+  display: block;
+  min-width: 0;
+}
+
+.champ {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--orange);
+}
+
+input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid transparent;
+  border-radius: 14px;
+  background: var(--peche-clair);
+  font: inherit;
+  color: var(--texte);
+  outline: none;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+input:focus {
+  border-color: var(--orange);
+  background: #fff;
+}
+
+input.invalide {
+  border-color: var(--rose);
+}
+
+.erreur {
+  font-size: 0.75rem;
+  color: var(--rose-fonce);
+}

@@ -1,0 +1,26 @@
+<section class="carte">
+  <aside class="intro">
+    <h1>Bon retour !</h1>
+    <p>Connecte-toi pour déclarer une pollution et retrouver tes signalements.</p>
+  </aside>
+
+  <form #connexionForm="ngForm" (ngSubmit)="onSubmit(connexionForm)" novalidate>
+    <h2>Connexion</h2>
+
+    <app-champs name="login" label="Login" [type]="EType.TEXT" [(value)]="identifiants.login" />
+    <app-champs
+      name="motDePasse"
+      label="Mot de passe"
+      [type]="EType.PASSWORD"
+      [(value)]="identifiants.motDePasse"
+    />
+
+    @if (erreur()) {
+      <p class="erreur">{{ erreur() }}</p>
+    }
+
+    <button type="submit" [disabled]="connexionForm.invalid">Se connecter</button>
+
+    <p class="bascule">Pas encore de compte ? <a routerLink="/inscription">S'inscrire</a></p>
+  </form>
+</section>

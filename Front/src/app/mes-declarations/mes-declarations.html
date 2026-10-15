@@ -1,0 +1,31 @@
+<section>
+  <h2>
+    Mes déclarations
+    <span class="compteur">{{ declarations.length }}</span>
+  </h2>
+
+  @if (declarations.length) {
+    <ul>
+      @for (d of declarations; track d.id) {
+        <li [class.selection]="d.id === selection">
+          <button type="button" class="ouvrir" (click)="voir.emit(d)">
+            <span class="badge">{{ d.type }}</span>
+            <span class="titre">{{ d.titre }}</span>
+            <span class="meta">{{ d.dateObservation | date: 'mediumDate' }} · {{ d.lieu }}</span>
+          </button>
+          <button
+            type="button"
+            class="supprimer"
+            [attr.aria-label]="'Supprimer ' + d.titre"
+            title="Supprimer"
+            (click)="supprimer.emit(d)"
+          >
+            ✕
+          </button>
+        </li>
+      }
+    </ul>
+  } @else {
+    <p class="vide">Tu n'as encore déclaré aucune pollution.</p>
+  }
+</section>

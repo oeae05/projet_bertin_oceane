@@ -1,0 +1,35 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: min(1000px, 100%);
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+header p {
+  margin: 0;
+}
+
+header button {
+  padding: 8px 18px;
+  border: 2px solid var(--orange);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--orange);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+header button:hover {
+  background: var(--orange);
+  color: #fff;
+}

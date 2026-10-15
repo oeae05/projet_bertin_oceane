@@ -1,0 +1,22 @@
+<div class="champ">
+  <label [for]="name">{{ label }}</label>
+  <input
+    [type]="type"
+    [id]="name"
+    [name]="name"
+    [(ngModel)]="value"
+    #ctrl="ngModel"
+    required
+    [email]="type === EType.EMAIL"
+    [class.invalide]="ctrl.invalid && ctrl.touched"
+  />
+  @if (ctrl.invalid && ctrl.touched) {
+    <span class="erreur">
+      @if (ctrl.hasError('required')) {
+        Ce champ est requis
+      } @else if (ctrl.hasError('email')) {
+        Adresse email invalide
+      }
+    </span>
+  }
+</div>

@@ -1,0 +1,188 @@
+<section class="carte">
+  <aside class="intro">
+    <h1>Signale une pollution</h1>
+    <p>Décris ce que tu as observé pour aider à protéger l'environnement.</p>
+  </aside>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+    <h2>Déclaration</h2>
+
+    <div class="champ">
+      <label for="titre">Titre de la pollution</label>
+      <input id="titre" type="text" formControlName="titre" [class.invalide]="invalide('titre')" />
+      @if (invalide('titre')) {
+        <span class="erreur">Ce champ est requis</span>
+      }
+    </div>
+
+    <div class="ligne">
+      <div class="champ">
+        <label for="type">Type de pollution</label>
+        <select id="type" formControlName="type" [class.invalide]="invalide('type')">
+          <option value="" disabled>Choisir un type</option>
+          @for (t of types; track t) {
+            <option [value]="t">{{ t }}</option>
+          }
+        </select>
+        @if (invalide('type')) {
+          <span class="erreur">Choisis un type</span>
+        }
+      </div>
+
+      <div class="champ">
+        <label for="dateObservation">Date de l'observation</label>
+        <input
+          id="dateObservation"
+          type="date"
+          formControlName="dateObservation"
+          [max]="aujourdhui"
+          [class.invalide]="invalide('dateObservation')"
+        />
+        @if (invalide('dateObservation')) {
+          <span class="erreur">
+            @if (erreur('dateObservation', 'required')) {
+              Ce champ est requis
+            } @else if (erreur('dateObservation', 'dateFuture')) {
+              La date ne peut pas être dans le futur
+            } @else {
+              Date invalide
+            }
+          </span>
+        }
+      </div>
+    </div>
+
+    <div class="champ">
+      <label for="description">Description</label>
+      <textarea
+        id="description"
+        rows="4"
+        formControlName="description"
+        [class.invalide]="invalide('description')"
+      ></textarea>
+      @if (invalide('description')) {
+        <span class="erreur">Ce champ est requis</span>
+      }
+    </div>
+
+    <div class="champ">
+      <div class="label-ligne">
+        <label for="lieu">Lieu</label>
+        <button
+          type="button"
+          class="lien"
+          (click)="meLocaliser()"
+          [disabled]="localisationEnCours()"
+        >
+          {{ localisationEnCours() ? 'Localisation…' : '📍 Me localiser' }}
+        </button>
+      </div>
+      <div class="autocompletion">
+        <input
+          id="lieu"
+          type="text"
+          formControlName="lieu"
+          placeholder="Commence à taper une adresse…"
+          autocomplete="off"
+          role="combobox"
+          aria-autocomplete="list"
+          aria-controls="suggestions-lieu"
+          [attr.aria-expanded]="suggestions().length > 0"
+          [attr.aria-activedescendant]="
+            suggestionActive() >= 0 ? 'suggestion-' + suggestionActive() : null
+          "
+          [class.invalide]="invalide('lieu')"
+          (keydown)="naviguerSuggestions($event)"
+          (blur)="fermerSuggestions()"
+        />
+        @if (rechercheEnCours()) {
+          <span class="chargement" aria-hidden="true"></span>
+        }
+        @if (suggestions().length) {
+          <ul id="suggestions-lieu" class="suggestions" role="listbox">
+            @for (a of suggestions(); track a.label; let i = $index) {
+              <li
+                [id]="'suggestion-' + i"
+                role="option"
+                [attr.aria-selected]="i === suggestionActive()"
+                [class.active]="i === suggestionActive()"
+                (mousedown)="$event.preventDefault(); choisirAdresse(a)"
+              >
+                <span class="suggestion-label">{{ a.label }}</span>
+                <span class="suggestion-contexte">{{ a.contexte }}</span>
+              </li>
+            }
+          </ul>
+        }
+      </div>
+      @if (invalide('lieu')) {
+        <span class="erreur">Ce champ est requis</span>
+      }
+    </div>
+
+    <div class="ligne">
+      <div class="champ">
+        <label for="latitude">Latitude</label>
+        <input
+          id="latitude"
+          type="number"
+          step="any"
+          formControlName="latitude"
+          [class.invalide]="invalide('latitude')"
+        />
+        @if (invalide('latitude')) {
+          <span class="erreur">
+            @if (erreur('latitude', 'required')) {
+              Nombre requis
+            } @else {
+              Entre -90 et 90
+            }
+          </span>
+        }
+      </div>
+
+      <div class="champ">
+        <label for="longitude">Longitude</label>
+        <input
+          id="longitude"
+          type="number"
+          step="any"
+          formControlName="longitude"
+          [class.invalide]="invalide('longitude')"
+        />
+        @if (invalide('longitude')) {
+          <span class="erreur">
+            @if (erreur('longitude', 'required')) {
+              Nombre requis
+            } @else {
+              Entre -180 et 180
+            }
+          </span>
+        }
+      </div>
+    </div>
+
+    @if (infoPosition()) {
+      <p class="info" aria-live="polite">{{ infoPosition() }}</p>
+    }
+    @if (position(); as p) {
+      <app-carte class="apercu" [latitude]="p.lat" [longitude]="p.lon" />
+    }
+
+    <div class="champ">
+      <label for="photoUrl">Photo (URL) <span class="optionnel">optionnel</span></label>
+      <input
+        id="photoUrl"
+        type="url"
+        formControlName="photoUrl"
+        placeholder="https://..."
+        [class.invalide]="invalide('photoUrl')"
+      />
+      @if (invalide('photoUrl')) {
+        <span class="erreur">L'URL doit commencer par http:// ou https://</span>
+      }
+    </div>
+
+    <button type="submit">Déclarer</button>
+  </form>
+</section>
