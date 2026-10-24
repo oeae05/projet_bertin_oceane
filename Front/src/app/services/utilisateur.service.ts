@@ -1,8 +1,14 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { Observable, catchError, throwError } from 'rxjs';
+import { Observable, catchError } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Inscription, Utilisateur } from '../models/utilisateur';
+import { versErreur } from './erreur-api';
+
+const erreurs = versErreur({
+  409: 'Ce login est déjà utilisé',
+  401: 'Login ou mot de passe incorrect',
+});
 
 /**
  * Appels HTTP de l'API des comptes utilisateurs.
@@ -22,31 +28,13 @@ export class UtilisateurService {
       email: inscription.email.trim(),
       motDePasse: inscription.motDePasse,
     };
-    return this.http.post<Utilisateur>(this.url, corps).pipe(catchError(versErreur));
+    return this.http.post<Utilisateur>(this.url, corps).pipe(catchError(erreurs));
   }
 
   // POST /utilisateurs/connexion -> 200 + utilisateur, 401 si identifiants faux
   connecter(login: string, motDePasse: string): Observable<Utilisateur> {
     return this.http
       .post<Utilisateur>(`${this.url}/connexion`, { login: login.trim(), motDePasse })
-      .pipe(catchError(versErreur));
+      .pipe(catchError(erreurs));
   }
-}
-
-// Les composants n'ont pas à connaître HttpErrorResponse : on renvoie un message lisible
-function versErreur(err: HttpErrorResponse): Observable<never> {
-  const messageServeur: unknown = err.error?.message;
-  let message: string;
-  if (typeof messageServeur === 'string' && messageServeur) {
-    message = messageServeur;
-  } else if (err.status === 0) {
-    message = 'Le serveur est injoignable, réessaie plus tard';
-  } else if (err.status === 409) {
-    message = 'Ce login est déjà utilisé';
-  } else if (err.status === 401) {
-    message = 'Login ou mot de passe incorrect';
-  } else {
-    message = `Une erreur est survenue (code ${err.status})`;
-  }
-  return throwError(() => new Error(message));
 }

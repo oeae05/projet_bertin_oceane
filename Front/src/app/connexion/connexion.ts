@@ -41,7 +41,7 @@ export class Connexion {
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe({
-        next: () => this.router.navigateByUrl('/declarations'),
+        next: () => this.router.navigateByUrl('/pollutions'),
         error: (e: Error) => this.erreur.set(e.message),
       });
   }

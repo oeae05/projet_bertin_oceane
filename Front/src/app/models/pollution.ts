@@ -18,9 +18,10 @@ export interface Pollution {
   photoUrl: string | null;
 }
 
-// Déclaration enregistrée, rattachée à son auteur
+// Pollution enregistrée par l'API, rattachée à son auteur
 export interface Declaration extends Pollution {
   id: string;
   auteur: string;
   dateCreation: string;
+  dateModification?: string;
 }

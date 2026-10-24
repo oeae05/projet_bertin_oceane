@@ -218,6 +218,11 @@ button:hover {
   background: var(--rose-fonce);
 }
 
+button[type='submit']:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
 @media (max-width: 720px) {
   .carte {
     grid-template-columns: 1fr;

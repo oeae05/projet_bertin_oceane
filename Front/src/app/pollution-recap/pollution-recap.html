@@ -2,7 +2,9 @@
   <header class="entete">
     <span class="badge">{{ pollution.type }}</span>
     <h1>{{ pollution.titre }}</h1>
-    <p>{{ message }}</p>
+    @if (message) {
+      <p>{{ message }}</p>
+    }
   </header>
 
   <div class="contenu" [class.avec-photo]="pollution.photoUrl && !photoEnErreur()">
@@ -58,6 +60,6 @@
   />
 
   <footer>
-    <button type="button" (click)="nouvelle.emit()">Nouvelle déclaration</button>
+    <ng-content />
   </footer>
 </section>

@@ -1,0 +1,22 @@
+@if (succes) {
+  <p class="alerte" role="status">{{ succes }}</p>
+}
+@if (erreur()) {
+  <p class="alerte erreur" role="alert">{{ erreur() }}</p>
+}
+
+@if (chargement()) {
+  <p class="alerte">Chargement de la pollution…</p>
+} @else if (pollution(); as p) {
+  <app-pollution-recap [pollution]="p" [message]="message()">
+    <a class="bouton secondaire" routerLink="/pollutions">← Retour à la liste</a>
+    @if (estAuteur()) {
+      <a class="bouton" [routerLink]="['/pollutions', p.id, 'modifier']">Modifier</a>
+      <button type="button" class="bouton danger" [disabled]="suppression()" (click)="supprimer()">
+        {{ suppression() ? 'Suppression…' : 'Supprimer' }}
+      </button>
+    }
+  </app-pollution-recap>
+} @else {
+  <a class="bouton secondaire" routerLink="/pollutions">← Retour à la liste</a>
+}

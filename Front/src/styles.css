@@ -24,3 +24,67 @@ body {
   font-family: 'Poppins', sans-serif;
   color: var(--texte);
 }
+
+/* Boutons et liens-boutons partagés par les pages */
+.bouton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 12px 24px;
+  border: 2px solid var(--orange);
+  border-radius: 999px;
+  background: var(--orange);
+  color: #fff;
+  font: inherit;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.bouton:hover {
+  border-color: var(--rose-fonce);
+  background: var(--rose-fonce);
+}
+
+.bouton.secondaire {
+  background: transparent;
+  color: var(--orange);
+}
+
+.bouton.secondaire:hover {
+  border-color: var(--orange);
+  background: var(--orange);
+  color: #fff;
+}
+
+.bouton.danger {
+  border-color: var(--rose-fonce);
+  background: transparent;
+  color: var(--rose-fonce);
+}
+
+.bouton.danger:hover {
+  background: var(--rose-fonce);
+  color: #fff;
+}
+
+.bouton:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+/* Bandeaux d'information et d'erreur */
+.alerte {
+  margin: 0;
+  padding: 12px 18px;
+  border-radius: 14px;
+  background: var(--peche-clair);
+}
+
+.alerte.erreur {
+  background: var(--rose-clair);
+  color: var(--rose-fonce);
+  font-weight: 600;
+}
