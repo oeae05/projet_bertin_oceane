@@ -1,7 +1,8 @@
 // Configuration de développement (ng serve), remplace environment.ts via angular.json
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:8080/api',
-  // Pas encore de backend : on simule l'API en local (voir mock/fausse-api.interceptor.ts)
-  fausseApi: true,
+  // API déployée sur Render (dossier api/). Pour l'API lancée en local : 'http://localhost:3000/api'
+  apiUrl: 'https://pollution-api-nxdm.onrender.com/api',
+  // true : les appels à l'API sont simulés dans le navigateur (voir mock/fausse-api.interceptor.ts)
+  fausseApi: false,
 };
