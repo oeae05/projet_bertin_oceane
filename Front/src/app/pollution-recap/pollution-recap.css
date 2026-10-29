@@ -106,23 +106,14 @@ a {
 }
 
 footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
   padding: 0 40px 40px;
 }
 
-button {
-  padding: 14px 28px;
-  border: none;
-  border-radius: 999px;
-  background: var(--orange);
-  color: #fff;
-  font: inherit;
-  font-weight: 700;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-button:hover {
-  background: var(--rose-fonce);
+footer:empty {
+  display: none;
 }
 
 @media (max-width: 720px) {
@@ -141,10 +132,7 @@ button:hover {
   }
 
   footer {
+    flex-direction: column;
     padding: 0 24px 24px;
-  }
-
-  button {
-    width: 100%;
   }
 }

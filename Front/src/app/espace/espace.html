@@ -1,0 +1,17 @@
+<header>
+  <p>
+    Bonjour <strong>{{ auth.utilisateur()?.prenom }} {{ auth.utilisateur()?.nom }}</strong>
+  </p>
+  <nav>
+    <a
+      routerLink="/pollutions"
+      routerLinkActive="actif"
+      [routerLinkActiveOptions]="{ exact: true }"
+      >Pollutions</a
+    >
+    <a routerLink="/pollutions/nouvelle" routerLinkActive="actif">Déclarer</a>
+    <button type="button" (click)="deconnecter()">Se déconnecter</button>
+  </nav>
+</header>
+
+<router-outlet />

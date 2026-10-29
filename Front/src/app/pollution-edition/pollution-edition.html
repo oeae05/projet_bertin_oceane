@@ -1,0 +1,21 @@
+@if (erreur()) {
+  <p class="alerte erreur" role="alert">{{ erreur() }}</p>
+}
+
+@if (chargement()) {
+  <p class="alerte">Chargement de la pollution…</p>
+} @else if (!editable()) {
+  <a class="bouton secondaire" routerLink="/pollutions">← Retour à la liste</a>
+} @else if (id()) {
+  <app-pollution-form
+    titre="Modifier la pollution"
+    sousTitre="Corrige ou complète les informations de ta déclaration."
+    libelleBouton="Enregistrer les modifications"
+    [initiale]="initiale()"
+    [enCours]="enCours()"
+    (valider)="enregistrer($event)"
+  />
+  <a class="bouton secondaire" [routerLink]="['/pollutions', id()]">Annuler</a>
+} @else {
+  <app-pollution-form [enCours]="enCours()" (valider)="enregistrer($event)" />
+}

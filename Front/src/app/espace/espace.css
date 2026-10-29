@@ -17,7 +17,28 @@ header p {
   margin: 0;
 }
 
-header button {
+nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+nav a {
+  padding: 8px 14px;
+  border-radius: 999px;
+  color: var(--texte);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+nav a:hover,
+nav a.actif {
+  background: var(--peche-clair);
+  color: var(--orange);
+}
+
+nav button {
   padding: 8px 18px;
   border: 2px solid var(--orange);
   border-radius: 999px;
@@ -29,7 +50,7 @@ header button {
   transition: background 0.2s, color 0.2s;
 }
 
-header button:hover {
+nav button:hover {
   background: var(--orange);
   color: #fff;
 }

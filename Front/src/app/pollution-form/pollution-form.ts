@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, output, signal } from '@angular/core';
+import { Component, DestroyRef, Input, inject, output, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   AbstractControl,
@@ -60,7 +60,24 @@ export class PollutionForm {
   private readonly adresses = inject(AdresseService);
   private readonly destroyRef = inject(DestroyRef);
 
-  readonly declarer = output<Pollution>();
+  // Textes différents en création et en modification
+  @Input() titre = 'Signale une pollution';
+  @Input() sousTitre = "Décris ce que tu as observé pour aider à protéger l'environnement.";
+  @Input() libelleBouton = 'Déclarer';
+  @Input() enCours = false;
+
+  // Pollution à modifier : pré-remplit le formulaire
+  @Input()
+  set initiale(pollution: Pollution | null) {
+    if (!pollution) {
+      return;
+    }
+    // emitEvent: false pour ne pas lancer les recherches d'adresse au remplissage
+    this.form.patchValue({ ...pollution, photoUrl: pollution.photoUrl ?? '' }, { emitEvent: false });
+    this.position.set(this.coordonnees());
+  }
+
+  readonly valider = output<Pollution>();
 
   protected readonly types = Object.values(ETypePollution);
   protected readonly aujourdhui = new Date().toISOString().slice(0, 10);
@@ -212,12 +229,12 @@ export class PollutionForm {
   }
 
   onSubmit(): void {
-    if (this.form.invalid) {
+    if (this.form.invalid || this.enCours) {
       this.form.markAllAsTouched();
       return;
     }
     const v = this.form.getRawValue();
-    this.declarer.emit({
+    this.valider.emit({
       titre: v.titre!.trim(),
       type: v.type as ETypePollution,
       description: v.description!.trim(),

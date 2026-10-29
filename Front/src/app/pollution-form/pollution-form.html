@@ -1,7 +1,7 @@
 <section class="carte">
   <aside class="intro">
-    <h1>Signale une pollution</h1>
-    <p>Décris ce que tu as observé pour aider à protéger l'environnement.</p>
+    <h1>{{ titre }}</h1>
+    <p>{{ sousTitre }}</p>
   </aside>
 
   <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
@@ -183,6 +183,8 @@
       }
     </div>
 
-    <button type="submit">Déclarer</button>
+    <button type="submit" [disabled]="enCours">
+      {{ enCours ? 'Enregistrement…' : libelleBouton }}
+    </button>
   </form>
 </section>

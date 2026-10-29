@@ -5,7 +5,7 @@ export interface Utilisateur {
   email: string;
 }
 
-// Version stockée : le mot de passe n'est jamais gardé en clair
-export interface UtilisateurEnregistre extends Utilisateur {
-  motDePasseHash: string;
+// Corps envoyé à l'API pour créer un compte
+export interface Inscription extends Utilisateur {
+  motDePasse: string;
 }

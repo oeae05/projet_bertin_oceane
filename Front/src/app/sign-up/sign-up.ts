@@ -1,6 +1,8 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { finalize } from 'rxjs';
 import { Champs } from '../champs/champs';
 import { EType } from '../models/e-type';
 import { AuthService } from '../services/auth.service';
@@ -14,9 +16,11 @@ import { AuthService } from '../services/auth.service';
 export class SignUp {
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly destroyRef = inject(DestroyRef);
 
   protected readonly EType = EType;
   protected readonly erreurServeur = signal('');
+  protected readonly enCours = signal(false);
 
   user = {
     login: '',
@@ -31,15 +35,22 @@ export class SignUp {
     return this.user.confirmation !== '' && this.user.motDePasse !== this.user.confirmation;
   }
 
-  async onSubmit(form: NgForm): Promise<void> {
-    if (form.invalid || this.motsDePasseDifferents) {
+  onSubmit(form: NgForm): void {
+    if (form.invalid || this.motsDePasseDifferents || this.enCours()) {
       return;
     }
-    try {
-      await this.auth.inscrire(this.user);
-      await this.router.navigateByUrl('/declarations');
-    } catch (e) {
-      this.erreurServeur.set((e as Error).message);
-    }
+    this.erreurServeur.set('');
+    this.enCours.set(true);
+    const { confirmation, ...inscription } = this.user;
+    this.auth
+      .inscrire(inscription)
+      .pipe(
+        finalize(() => this.enCours.set(false)),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe({
+        next: () => this.router.navigateByUrl('/pollutions'),
+        error: (e: Error) => this.erreurServeur.set(e.message),
+      });
   }
 }

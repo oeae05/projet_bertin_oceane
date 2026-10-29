@@ -1,0 +1,93 @@
+<section>
+  <div class="titre-ligne">
+    <h1>
+      Pollutions signalées
+      @if (!chargement()) {
+        <span class="compteur">
+          {{ filtreActif() ? resultats().length + ' / ' + pollutions().length : pollutions().length }}
+        </span>
+      }
+    </h1>
+    <a class="bouton" routerLink="/pollutions/nouvelle">+ Déclarer une pollution</a>
+  </div>
+
+  <form class="filtres" [formGroup]="filtres" role="search">
+    <div class="champ large">
+      <label for="recherche">Rechercher</label>
+      <input
+        id="recherche"
+        type="search"
+        formControlName="recherche"
+        placeholder="Titre, description, lieu…"
+      />
+    </div>
+    <div class="champ">
+      <label for="type">Type</label>
+      <select id="type" formControlName="type">
+        <option value="">Tous les types</option>
+        @for (t of types; track t) {
+          <option [value]="t">{{ t }}</option>
+        }
+      </select>
+    </div>
+    <div class="champ">
+      <label for="depuis">Observée depuis le</label>
+      <input id="depuis" type="date" formControlName="depuis" />
+    </div>
+    <div class="champ">
+      <label for="jusqua">Jusqu'au</label>
+      <input id="jusqua" type="date" formControlName="jusqua" />
+    </div>
+    <label class="case">
+      <input type="checkbox" formControlName="miennes" />
+      Seulement mes déclarations
+    </label>
+    @if (filtreActif()) {
+      <button type="button" class="effacer" (click)="reinitialiser()">Effacer les filtres</button>
+    }
+  </form>
+
+  @if (erreur()) {
+    <p class="alerte erreur" role="alert">
+      {{ erreur() }}
+      @if (!pollutions().length) {
+        <button type="button" class="effacer" (click)="charger()">Réessayer</button>
+      }
+    </p>
+  }
+
+  @if (chargement()) {
+    <p class="vide">Chargement des pollutions…</p>
+  } @else if (resultats().length) {
+    <ul>
+      @for (p of resultats(); track p.id) {
+        <li [class.mienne]="p.auteur === login()">
+          <a class="ouvrir" [routerLink]="['/pollutions', p.id]">
+            <span class="badge">{{ p.type }}</span>
+            <span class="titre">{{ p.titre }}</span>
+            <span class="meta">{{ p.dateObservation | date: 'mediumDate' }} · {{ p.lieu }}</span>
+            <span class="meta">
+              {{ p.auteur === login() ? 'Déclarée par toi' : 'Déclarée par ' + p.auteur }}
+            </span>
+          </a>
+          @if (p.auteur === login()) {
+            <button
+              type="button"
+              class="supprimer"
+              [attr.aria-label]="'Supprimer ' + p.titre"
+              title="Supprimer"
+              [disabled]="suppression() === p.id"
+              (click)="supprimer(p)"
+            >
+              ✕
+            </button>
+          }
+        </li>
+      }
+    </ul>
+  } @else if (pollutions().length) {
+    <p class="vide">Aucune pollution ne correspond à ces critères.</p>
+  } @else if (!erreur()) {
+    <p class="vide">Aucune pollution n'a encore été signalée.</p>
+  }
+</section>

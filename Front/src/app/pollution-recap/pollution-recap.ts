@@ -1,5 +1,5 @@
 import { DatePipe, DecimalPipe } from '@angular/common';
-import { Component, Input, output, signal } from '@angular/core';
+import { Component, Input, signal } from '@angular/core';
 import { Carte } from '../carte/carte';
 import { Pollution } from '../models/pollution';
 
@@ -9,6 +9,7 @@ import { Pollution } from '../models/pollution';
   templateUrl: './pollution-recap.html',
   styleUrl: './pollution-recap.css',
 })
+// Fiche d'une pollution ; les boutons d'action sont fournis par le parent (<ng-content>)
 export class PollutionRecap {
   private _pollution!: Pollution;
 
@@ -22,9 +23,7 @@ export class PollutionRecap {
     return this._pollution;
   }
 
-  @Input() message = 'Déclaration enregistrée, merci pour ton signalement !';
-
-  readonly nouvelle = output<void>();
+  @Input() message = '';
 
   protected readonly photoEnErreur = signal(false);
 }
