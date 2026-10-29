@@ -1,0 +1,383 @@
+{
+  "info": {
+    "name": "Pollution API",
+    "description": "Tests de l'API des pollutions déployée sur Render (dossier api/).\n\nImporter ce fichier dans Postman (Import > Files), puis lancer les requêtes dans l'ordre ou toute la collection avec le Runner.\n\nLe premier appel peut prendre jusqu'à une minute : le service Render gratuit se met en veille.\n\nVariables de la collection :\n- baseUrl : URL de l'API (mettre http://localhost:3000 pour l'API locale)\n- login / motDePasse : compte de test, le login est généré à chaque lancement\n- pollutionId : rempli automatiquement par « Créer une pollution »",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "https://pollution-api-nxdm.onrender.com" },
+    { "key": "login", "value": "" },
+    { "key": "motDePasse", "value": "MotDePasse123" },
+    { "key": "pollutionId", "value": "" }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Login de test unique par lancement, pour ne pas tomber sur « Ce login est déjà utilisé »",
+          "if (!pm.collectionVariables.get('login')) {",
+          "  pm.collectionVariables.set('login', 'postman' + Date.now());",
+          "}"
+        ]
+      }
+    }
+  ],
+  "item": [
+    {
+      "name": "Santé",
+      "item": [
+        {
+          "name": "Accueil",
+          "request": { "method": "GET", "url": "{{baseUrl}}/" },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200 OK', () => pm.response.to.have.status(200));",
+                  "pm.test('Message de bienvenue', () => pm.expect(pm.response.json().message).to.include('Pollution API'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Health check",
+          "request": { "method": "GET", "url": "{{baseUrl}}/health" },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200 OK', () => pm.response.to.have.status(200));",
+                  "pm.test('status = OK', () => pm.expect(pm.response.json().status).to.eql('OK'));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Pollutions (lecture)",
+      "item": [
+        {
+          "name": "Lister les pollutions",
+          "request": { "method": "GET", "url": "{{baseUrl}}/api/pollutions" },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200 OK', () => pm.response.to.have.status(200));",
+                  "const liste = pm.response.json();",
+                  "pm.test('Renvoie un tableau', () => pm.expect(liste).to.be.an('array'));",
+                  "pm.test('Chaque pollution a les champs attendus', () => {",
+                  "  liste.forEach((p) => pm.expect(p).to.include.keys('id', 'titre', 'type', 'description', 'dateObservation', 'lieu', 'latitude', 'longitude', 'auteur', 'dateCreation'));",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Lister (route au singulier)",
+          "request": { "method": "GET", "url": "{{baseUrl}}/api/pollution" },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": ["pm.test('200 OK', () => pm.response.to.have.status(200));"]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Pollution inconnue → 404",
+          "request": { "method": "GET", "url": "{{baseUrl}}/api/pollutions/00000000-0000-0000-0000-000000000000" },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": ["pm.test('404 Not Found', () => pm.response.to.have.status(404));"]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Utilisateurs",
+      "item": [
+        {
+          "name": "Inscription",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/utilisateurs",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"login\": \"{{login}}\",\n  \"nom\": \"Test\",\n  \"prenom\": \"Postman\",\n  \"email\": \"{{login}}@example.com\",\n  \"motDePasse\": \"{{motDePasse}}\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('201 Created', () => pm.response.to.have.status(201));",
+                  "pm.test('Le mot de passe n\\'est pas renvoyé', () => {",
+                  "  const u = pm.response.json();",
+                  "  pm.expect(u).to.not.have.any.keys('motDePasse', 'motDePasseHash');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Inscription en double → 409",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/utilisateurs",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"login\": \"{{login}}\",\n  \"nom\": \"Test\",\n  \"prenom\": \"Postman\",\n  \"email\": \"{{login}}@example.com\",\n  \"motDePasse\": \"{{motDePasse}}\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": ["pm.test('409 Conflict', () => pm.response.to.have.status(409));"]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Connexion",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/utilisateurs/connexion",
+            "body": { "mode": "raw", "raw": "{\n  \"login\": \"{{login}}\",\n  \"motDePasse\": \"{{motDePasse}}\"\n}" }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200 OK', () => pm.response.to.have.status(200));",
+                  "pm.test('Renvoie le bon utilisateur', () => pm.expect(pm.response.json().login).to.eql(pm.collectionVariables.get('login')));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Connexion mauvais mot de passe → 401",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/utilisateurs/connexion",
+            "body": { "mode": "raw", "raw": "{\n  \"login\": \"{{login}}\",\n  \"motDePasse\": \"faux\"\n}" }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": ["pm.test('401 Unauthorized', () => pm.response.to.have.status(401));"]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Pollutions (écriture)",
+      "description": "L'auteur est donné par l'en-tête X-Utilisateur, comme le fait l'intercepteur Angular.",
+      "item": [
+        {
+          "name": "Créer sans être connecté → 401",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/pollutions",
+            "body": { "mode": "raw", "raw": "{}" }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": ["pm.test('401 Unauthorized', () => pm.response.to.have.status(401));"]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Créer avec un corps invalide → 400",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "X-Utilisateur", "value": "{{login}}" }
+            ],
+            "url": "{{baseUrl}}/api/pollutions",
+            "body": { "mode": "raw", "raw": "{\n  \"titre\": \"Incomplet\",\n  \"type\": \"Inconnu\"\n}" }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": ["pm.test('400 Bad Request', () => pm.response.to.have.status(400));"]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Créer une pollution",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "X-Utilisateur", "value": "{{login}}" }
+            ],
+            "url": "{{baseUrl}}/api/pollutions",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titre\": \"Fumée noire au-dessus de l'usine\",\n  \"type\": \"Air\",\n  \"description\": \"Panache de fumée noire visible depuis le pont.\",\n  \"dateObservation\": \"2026-10-29\",\n  \"lieu\": \"Pont des Morts, Metz\",\n  \"latitude\": 49.123,\n  \"longitude\": 6.167,\n  \"photoUrl\": null\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('201 Created', () => pm.response.to.have.status(201));",
+                  "const p = pm.response.json();",
+                  "pm.test('L\\'auteur vient de X-Utilisateur', () => pm.expect(p.auteur).to.eql(pm.collectionVariables.get('login')));",
+                  "pm.test('id généré par l\\'API', () => pm.expect(p.id).to.be.a('string'));",
+                  "// Réutilisé par les requêtes suivantes",
+                  "pm.collectionVariables.set('pollutionId', p.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Obtenir la pollution créée",
+          "request": { "method": "GET", "url": "{{baseUrl}}/api/pollutions/{{pollutionId}}" },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200 OK', () => pm.response.to.have.status(200));",
+                  "pm.test('Bon id', () => pm.expect(pm.response.json().id).to.eql(pm.collectionVariables.get('pollutionId')));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Modifier la pollution",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "X-Utilisateur", "value": "{{login}}" }
+            ],
+            "url": "{{baseUrl}}/api/pollutions/{{pollutionId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titre\": \"Fumée noire au-dessus de l'usine (mise à jour)\",\n  \"type\": \"Air\",\n  \"description\": \"La fumée a disparu en fin de journée.\",\n  \"dateObservation\": \"2026-10-29\",\n  \"lieu\": \"Pont des Morts, Metz\",\n  \"latitude\": 49.123,\n  \"longitude\": 6.167,\n  \"photoUrl\": null\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200 OK', () => pm.response.to.have.status(200));",
+                  "pm.test('dateModification remplie', () => pm.expect(pm.response.json().dateModification).to.be.a('string'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Modifier par un autre utilisateur → 403",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "X-Utilisateur", "value": "quelqu-un-d-autre" }
+            ],
+            "url": "{{baseUrl}}/api/pollutions/{{pollutionId}}",
+            "body": { "mode": "raw", "raw": "{\n  \"titre\": \"Piratage\"\n}" }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": ["pm.test('403 Forbidden', () => pm.response.to.have.status(403));"]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Supprimer la pollution",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "X-Utilisateur", "value": "{{login}}" }],
+            "url": "{{baseUrl}}/api/pollutions/{{pollutionId}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": ["pm.test('204 No Content', () => pm.response.to.have.status(204));"]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Pollution supprimée → 404",
+          "request": { "method": "GET", "url": "{{baseUrl}}/api/pollutions/{{pollutionId}}" },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('404 Not Found', () => pm.response.to.have.status(404));",
+                  "// Prochain lancement : nouveau login de test",
+                  "pm.collectionVariables.set('login', '');"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
