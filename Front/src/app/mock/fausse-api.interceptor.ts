@@ -29,8 +29,9 @@ type Reponse = HttpResponse<unknown> | Promise<HttpResponse<unknown>>;
 
 // Table des routes : méthode + chemin (les groupes capturés sont passés au traitement)
 const ROUTES: { methode: string; chemin: RegExp; traiter: (req: HttpRequest<any>, ...p: string[]) => Reponse }[] = [
-  { methode: 'POST', chemin: /^\/utilisateurs$/, traiter: inscrire },
-  { methode: 'POST', chemin: /^\/utilisateurs\/connexion$/, traiter: connecter },
+  { methode: 'GET', chemin: /^\/users$/, traiter: listerUtilisateurs },
+  { methode: 'POST', chemin: /^\/users$/, traiter: inscrire },
+  { methode: 'POST', chemin: /^\/users\/connexion$/, traiter: connecter },
   { methode: 'GET', chemin: /^\/pollutions$/, traiter: listerPollutions },
   { methode: 'POST', chemin: /^\/pollutions$/, traiter: creerPollution },
   { methode: 'GET', chemin: /^\/pollutions\/([^/]+)$/, traiter: obtenirPollution },
@@ -82,6 +83,12 @@ async function connecter(
   }
   const { motDePasseHash, ...utilisateur } = compte;
   return new HttpResponse({ status: 200, body: utilisateur, url: req.url });
+}
+
+function listerUtilisateurs(req: HttpRequest<unknown>): HttpResponse<Utilisateur[]> {
+  const comptes = lire<UtilisateurEnregistre[]>(CLE_UTILISATEURS, []);
+  const body = comptes.map(({ motDePasseHash, ...utilisateur }) => utilisateur);
+  return new HttpResponse({ status: 200, body, url: req.url });
 }
 
 function trouver(comptes: UtilisateurEnregistre[], login: string) {

@@ -1,0 +1,28 @@
+<section>
+  <h1>Utilisateurs ({{ utilisateurs().length }})</h1>
+
+  @if (erreur()) {
+    <p role="alert">{{ erreur() }}</p>
+  }
+
+  <table>
+    <thead>
+      <tr>
+        <th>Login</th>
+        <th>Prénom</th>
+        <th>Nom</th>
+        <th>Email</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (u of utilisateurs(); track u.login) {
+        <tr>
+          <td>{{ u.login }}</td>
+          <td>{{ u.prenom }}</td>
+          <td>{{ u.nom }}</td>
+          <td>{{ u.email }}</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</section>

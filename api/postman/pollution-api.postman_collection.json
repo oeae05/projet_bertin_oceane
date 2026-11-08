@@ -121,7 +121,7 @@
           "request": {
             "method": "POST",
             "header": [{ "key": "Content-Type", "value": "application/json" }],
-            "url": "{{baseUrl}}/api/utilisateurs",
+            "url": "{{baseUrl}}/api/users",
             "body": {
               "mode": "raw",
               "raw": "{\n  \"login\": \"{{login}}\",\n  \"nom\": \"Test\",\n  \"prenom\": \"Postman\",\n  \"email\": \"{{login}}@example.com\",\n  \"motDePasse\": \"{{motDePasse}}\"\n}"
@@ -148,7 +148,7 @@
           "request": {
             "method": "POST",
             "header": [{ "key": "Content-Type", "value": "application/json" }],
-            "url": "{{baseUrl}}/api/utilisateurs",
+            "url": "{{baseUrl}}/api/users",
             "body": {
               "mode": "raw",
               "raw": "{\n  \"login\": \"{{login}}\",\n  \"nom\": \"Test\",\n  \"prenom\": \"Postman\",\n  \"email\": \"{{login}}@example.com\",\n  \"motDePasse\": \"{{motDePasse}}\"\n}"
@@ -169,7 +169,7 @@
           "request": {
             "method": "POST",
             "header": [{ "key": "Content-Type", "value": "application/json" }],
-            "url": "{{baseUrl}}/api/utilisateurs/connexion",
+            "url": "{{baseUrl}}/api/users/connexion",
             "body": { "mode": "raw", "raw": "{\n  \"login\": \"{{login}}\",\n  \"motDePasse\": \"{{motDePasse}}\"\n}" }
           },
           "event": [
@@ -190,7 +190,7 @@
           "request": {
             "method": "POST",
             "header": [{ "key": "Content-Type", "value": "application/json" }],
-            "url": "{{baseUrl}}/api/utilisateurs/connexion",
+            "url": "{{baseUrl}}/api/users/connexion",
             "body": { "mode": "raw", "raw": "{\n  \"login\": \"{{login}}\",\n  \"motDePasse\": \"faux\"\n}" }
           },
           "event": [

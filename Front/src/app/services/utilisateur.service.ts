@@ -17,9 +17,14 @@ const erreurs = versErreur({
 @Injectable({ providedIn: 'root' })
 export class UtilisateurService {
   private readonly http = inject(HttpClient);
-  private readonly url = `${environment.apiUrl}/utilisateurs`;
+  private readonly url = `${environment.apiUrl}/users`;
 
-  // POST /utilisateurs -> 201 + utilisateur créé, 409 si le login est pris
+  // GET /users -> 200 + liste des utilisateurs
+  lister(): Observable<Utilisateur[]> {
+    return this.http.get<Utilisateur[]>(this.url).pipe(catchError(erreurs));
+  }
+
+  // POST /users -> 201 + utilisateur créé, 409 si le login est pris
   inscrire(inscription: Inscription): Observable<Utilisateur> {
     const corps: Inscription = {
       login: inscription.login.trim(),
@@ -31,7 +36,7 @@ export class UtilisateurService {
     return this.http.post<Utilisateur>(this.url, corps).pipe(catchError(erreurs));
   }
 
-  // POST /utilisateurs/connexion -> 200 + utilisateur, 401 si identifiants faux
+  // POST /users/connexion -> 200 + utilisateur, 401 si identifiants faux
   connecter(login: string, motDePasse: string): Observable<Utilisateur> {
     return this.http
       .post<Utilisateur>(`${this.url}/connexion`, { login: login.trim(), motDePasse })

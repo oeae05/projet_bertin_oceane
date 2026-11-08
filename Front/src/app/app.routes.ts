@@ -7,6 +7,7 @@ import { PollutionEdition } from './pollution-edition/pollution-edition';
 import { PollutionListe } from './pollution-liste/pollution-liste';
 import { AuthService } from './services/auth.service';
 import { SignUp } from './sign-up/sign-up';
+import { UtilisateurListe } from './utilisateur-liste/utilisateur-liste';
 
 // Pages réservées aux personnes connectées
 const connecte: CanActivateFn = () =>
@@ -33,6 +34,7 @@ export const routes: Routes = [
         component: PollutionEdition,
         title: 'Modifier une pollution',
       },
+      { path: 'utilisateurs', component: UtilisateurListe, title: 'Utilisateurs' },
       { path: '', pathMatch: 'full', redirectTo: 'pollutions' },
     ],
   },
