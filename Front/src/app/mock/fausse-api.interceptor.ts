@@ -29,9 +29,9 @@ type Reponse = HttpResponse<unknown> | Promise<HttpResponse<unknown>>;
 
 // Table des routes : méthode + chemin (les groupes capturés sont passés au traitement)
 const ROUTES: { methode: string; chemin: RegExp; traiter: (req: HttpRequest<any>, ...p: string[]) => Reponse }[] = [
-  { methode: 'GET', chemin: /^\/users$/, traiter: listerUtilisateurs },
-  { methode: 'POST', chemin: /^\/users$/, traiter: inscrire },
-  { methode: 'POST', chemin: /^\/users\/connexion$/, traiter: connecter },
+  { methode: 'GET', chemin: /^\/utilisateurs$/, traiter: listerUtilisateurs },
+  { methode: 'POST', chemin: /^\/utilisateurs$/, traiter: inscrire },
+  { methode: 'POST', chemin: /^\/utilisateurs\/connexion$/, traiter: connecter },
   { methode: 'GET', chemin: /^\/pollutions$/, traiter: listerPollutions },
   { methode: 'POST', chemin: /^\/pollutions$/, traiter: creerPollution },
   { methode: 'GET', chemin: /^\/pollutions\/([^/]+)$/, traiter: obtenirPollution },
