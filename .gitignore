@@ -17,6 +17,7 @@ e2e/test-output/
 # Environnement
 .env
 .env.*
+!.env.example
 
 # IDE / éditeurs
 .idea/

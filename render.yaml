@@ -1,0 +1,18 @@
+# Blueprint Render : Dashboard > New > Blueprint, puis choisir ce dépôt.
+# DATABASE_URL (sync: false) est demandée à la création : coller l'URL "Session pooler" de Supabase.
+services:
+  - type: web
+    name: pollution-api
+    runtime: node
+    plan: free
+    rootDir: api
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_VERSION
+        value: 22
+      - key: DATABASE_URL
+        sync: false
+      - key: CORS_ORIGIN
+        value: "*"
