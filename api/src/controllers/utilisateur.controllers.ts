@@ -33,7 +33,7 @@ function publique(u: UtilisateurInstance) {
   return { login, nom, prenom, email };
 }
 
-// POST /api/utilisateurs -> 201 + utilisateur créé, 409 si le login est pris
+// POST /api/users -> 201 + utilisateur créé, 409 si le login est pris
 export const inscrire = async (req: Request, res: Response): Promise<void> => {
   const { login, nom, prenom, email, motDePasse } = req.body ?? {};
   if (!login || !motDePasse) {
@@ -58,7 +58,7 @@ export const inscrire = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-// POST /api/utilisateurs/connexion -> 200 + utilisateur, 401 si identifiants faux
+// POST /api/users/connexion -> 200 + utilisateur, 401 si identifiants faux
 export const connecter = async (req: Request, res: Response): Promise<void> => {
   const { login, motDePasse } = req.body ?? {};
   try {
@@ -73,4 +73,14 @@ export const connecter = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-export default { inscrire, connecter };
+// GET /api/users -> 200 + liste des utilisateurs
+export const lister = async (_req: Request, res: Response): Promise<void> => {
+  try {
+    const utilisateurs = await Utilisateurs.findAll({ order: [["login", "ASC"]] });
+    res.status(200).json(utilisateurs.map(publique));
+  } catch (err) {
+    repondreErreur(res, err, "Erreur lors de la récupération des utilisateurs");
+  }
+};
+
+export default { inscrire, connecter, lister };

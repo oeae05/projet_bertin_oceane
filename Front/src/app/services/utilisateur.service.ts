@@ -19,6 +19,11 @@ export class UtilisateurService {
   private readonly http = inject(HttpClient);
   private readonly url = `${environment.apiUrl}/utilisateurs`;
 
+  // GET /utilisateurs -> 200 + liste des utilisateurs
+  lister(): Observable<Utilisateur[]> {
+    return this.http.get<Utilisateur[]>(this.url).pipe(catchError(erreurs));
+  }
+
   // POST /utilisateurs -> 201 + utilisateur créé, 409 si le login est pris
   inscrire(inscription: Inscription): Observable<Utilisateur> {
     const corps: Inscription = {
