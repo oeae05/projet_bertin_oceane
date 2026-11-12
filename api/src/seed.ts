@@ -11,6 +11,7 @@ const EXEMPLES: PollutionCreationAttributes[] = [
     lieu: "Plage du Prado, Marseille",
     latitude: 43.259,
     longitude: 5.375,
+    indice: 18,
     auteur: "exemple",
   },
   {
@@ -21,6 +22,7 @@ const EXEMPLES: PollutionCreationAttributes[] = [
     lieu: "Forêt de Haye, Nancy",
     latitude: 48.672,
     longitude: 6.108,
+    indice: 45,
     auteur: "exemple",
   },
   {
@@ -31,6 +33,7 @@ const EXEMPLES: PollutionCreationAttributes[] = [
     lieu: "Quai Paul Vautrin, Metz",
     latitude: 49.121,
     longitude: 6.17,
+    indice: 120,
     auteur: "exemple",
   },
 ];

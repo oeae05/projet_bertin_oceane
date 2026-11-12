@@ -12,6 +12,7 @@ export interface PollutionAttributes {
   lieu: string;
   latitude: number;
   longitude: number;
+  indice: number;
   photoUrl: string | null;
   auteur: string;
   dateCreation: Date;
@@ -20,7 +21,7 @@ export interface PollutionAttributes {
 
 // Champs remplis par la base ou l'API, pas par le client
 export interface PollutionCreationAttributes
-  extends Optional<PollutionAttributes, "id" | "photoUrl" | "dateCreation" | "dateModification"> {}
+  extends Optional<PollutionAttributes, "id" | "indice" | "photoUrl" | "dateCreation" | "dateModification"> {}
 
 export interface PollutionInstance
   extends Model<PollutionAttributes, PollutionCreationAttributes>,
@@ -41,6 +42,8 @@ export default function definePollutions(sequelize: Sequelize): PollutionModel {
       lieu: { type: DataTypes.STRING(200), allowNull: false },
       latitude: { type: DataTypes.DOUBLE, allowNull: false, validate: { min: -90, max: 90 } },
       longitude: { type: DataTypes.DOUBLE, allowNull: false, validate: { min: -180, max: 180 } },
+      // Indice de dangerosité (0-20 faible, 21-50 modérée, 51-100 élevée, 101+ dangereuse)
+      indice: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 0, validate: { isInt: true, min: 0 } },
       photoUrl: { type: DataTypes.TEXT, allowNull: true },
       auteur: { type: DataTypes.STRING(50), allowNull: false },
       dateCreation: { type: DataTypes.DATE, allowNull: false, defaultValue: DataTypes.NOW },

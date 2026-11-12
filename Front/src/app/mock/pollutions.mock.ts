@@ -23,6 +23,7 @@ const EXEMPLES: Declaration[] = [
     lieu: 'Plage du Prado, Marseille',
     latitude: 43.259,
     longitude: 5.375,
+    indice: 18,
     photoUrl: null,
     auteur: 'exemple',
     dateCreation: '2026-09-12T10:30:00.000Z',
@@ -36,6 +37,7 @@ const EXEMPLES: Declaration[] = [
     lieu: 'Forêt de Haye, Nancy',
     latitude: 48.672,
     longitude: 6.108,
+    indice: 45,
     photoUrl: null,
     auteur: 'exemple',
     dateCreation: '2026-10-02T15:00:00.000Z',
@@ -49,6 +51,7 @@ const EXEMPLES: Declaration[] = [
     lieu: 'Quai Paul Vautrin, Metz',
     latitude: 49.121,
     longitude: 6.17,
+    indice: 120,
     photoUrl: null,
     auteur: 'exemple',
     dateCreation: '2026-10-18T08:45:00.000Z',
@@ -139,7 +142,9 @@ function valider(req: HttpRequest<Pollution>): Pollution {
     !b.dateObservation ||
     !b.lieu?.trim() ||
     !Number.isFinite(b.latitude) ||
-    !Number.isFinite(b.longitude)
+    !Number.isFinite(b.longitude) ||
+    !Number.isInteger(b.indice) ||
+    b.indice < 0
   ) {
     throw erreur(req, 400, 'Pollution incomplète ou invalide');
   }
@@ -151,6 +156,7 @@ function valider(req: HttpRequest<Pollution>): Pollution {
     lieu: b.lieu.trim(),
     latitude: b.latitude,
     longitude: b.longitude,
+    indice: b.indice,
     photoUrl: b.photoUrl || null,
   };
 }

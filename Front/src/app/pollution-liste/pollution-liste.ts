@@ -4,7 +4,9 @@ import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { finalize, map } from 'rxjs';
+import { HighlightPollutionDirective } from '../directives/highlight-pollution.directive';
 import { Declaration, ETypePollution } from '../models/pollution';
+import { PollutionLevelPipe } from '../pipes/pollution-level.pipe';
 import { AuthService } from '../services/auth.service';
 import { PollutionService } from '../services/pollution.service';
 
@@ -14,7 +16,13 @@ const normaliser = (texte: string) =>
 
 @Component({
   selector: 'app-pollution-liste',
-  imports: [DatePipe, ReactiveFormsModule, RouterLink],
+  imports: [
+    DatePipe,
+    ReactiveFormsModule,
+    RouterLink,
+    PollutionLevelPipe,
+    HighlightPollutionDirective,
+  ],
   templateUrl: './pollution-liste.html',
   styleUrl: './pollution-liste.css',
 })

@@ -19,7 +19,9 @@ import {
   tap,
 } from 'rxjs';
 import { Carte } from '../carte/carte';
+import { HighlightPollutionDirective } from '../directives/highlight-pollution.directive';
 import { ETypePollution, Pollution } from '../models/pollution';
+import { PollutionLevelPipe } from '../pipes/pollution-level.pipe';
 import { Adresse, AdresseService } from '../services/adresse.service';
 
 // Date au format AAAA-MM-JJ, existante et pas dans le futur
@@ -51,7 +53,7 @@ const arrondir = (n: number) => Math.round(n * 1e6) / 1e6;
 
 @Component({
   selector: 'app-pollution-form',
-  imports: [ReactiveFormsModule, Carte],
+  imports: [ReactiveFormsModule, Carte, PollutionLevelPipe, HighlightPollutionDirective],
   templateUrl: './pollution-form.html',
   styleUrl: './pollution-form.css',
 })
@@ -95,6 +97,10 @@ export class PollutionForm {
     longitude: [
       null as number | null,
       [Validators.required, nombreValide, Validators.min(-180), Validators.max(180)],
+    ],
+    indice: [
+      null as number | null,
+      [Validators.required, Validators.min(0), Validators.pattern(/^\d+$/)],
     ],
     photoUrl: ['', Validators.pattern(/^https?:\/\/\S+$/)],
   });
@@ -242,6 +248,7 @@ export class PollutionForm {
       lieu: v.lieu!.trim(),
       latitude: Number(v.latitude),
       longitude: Number(v.longitude),
+      indice: Number(v.indice),
       photoUrl: v.photoUrl?.trim() || null,
     });
   }

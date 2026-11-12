@@ -63,7 +63,12 @@
       @for (p of resultats(); track p.id) {
         <li [class.mienne]="p.auteur === login()">
           <a class="ouvrir" [routerLink]="['/pollutions', p.id]">
-            <span class="badge">{{ p.type }}</span>
+            <span class="etiquettes">
+              <span class="badge">{{ p.type }}</span>
+              <span class="niveau" [appHighlightPollution]="p.indice">
+                {{ p.indice | pollutionLevel }}
+              </span>
+            </span>
             <span class="titre">{{ p.titre }}</span>
             <span class="meta">{{ p.dateObservation | date: 'mediumDate' }} · {{ p.lieu }}</span>
             <span class="meta">

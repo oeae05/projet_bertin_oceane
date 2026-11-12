@@ -15,6 +15,8 @@ export interface Pollution {
   lieu: string;
   latitude: number;
   longitude: number;
+  // Indice de dangerosité (0 et plus), voir PollutionLevelPipe
+  indice: number;
   photoUrl: string | null;
 }
 

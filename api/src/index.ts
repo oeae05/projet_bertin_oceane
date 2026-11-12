@@ -28,9 +28,9 @@ app.get("/health", (_req: Request, res: Response) => {
 
 initRoutes(app);
 
-// Crée les tables si elles n'existent pas, puis démarre le serveur
+// Crée les tables (et ajoute les colonnes manquantes, ex. indice), puis démarre le serveur
 db.sequelize
-  .sync()
+  .sync({ alter: true })
   .then(async () => {
     console.log("Synced db.");
     await initialiserDonnees();

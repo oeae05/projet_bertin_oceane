@@ -12,8 +12,8 @@ const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 // Seuls ces champs viennent du client : id, auteur et dates sont fixés par l'API
 function champsModifiables(corps: Partial<PollutionAttributes> = {}) {
-  const { titre, type, description, dateObservation, lieu, latitude, longitude, photoUrl } = corps;
-  return { titre, type, description, dateObservation, lieu, latitude, longitude, photoUrl: photoUrl ?? null };
+  const { titre, type, description, dateObservation, lieu, latitude, longitude, indice, photoUrl } = corps;
+  return { titre, type, description, dateObservation, lieu, latitude, longitude, indice, photoUrl: photoUrl ?? null };
 }
 
 function auteurConnecte(req: Request, res: Response): string | null {

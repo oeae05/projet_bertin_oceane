@@ -170,6 +170,34 @@
     }
 
     <div class="champ">
+      <label for="indice">Indice de dangerosité</label>
+      <div class="indice-ligne">
+        <input
+          id="indice"
+          type="number"
+          min="0"
+          step="1"
+          formControlName="indice"
+          [class.invalide]="invalide('indice')"
+        />
+        @if (form.controls.indice.valid) {
+          <span class="niveau" [appHighlightPollution]="form.controls.indice.value">
+            {{ form.controls.indice.value | pollutionLevel }}
+          </span>
+        }
+      </div>
+      @if (invalide('indice')) {
+        <span class="erreur">
+          @if (erreur('indice', 'required')) {
+            Nombre requis
+          } @else {
+            Nombre entier positif ou nul
+          }
+        </span>
+      }
+    </div>
+
+    <div class="champ">
       <label for="photoUrl">Photo (URL) <span class="optionnel">optionnel</span></label>
       <input
         id="photoUrl"
