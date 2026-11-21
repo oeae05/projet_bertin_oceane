@@ -1,4 +1,4 @@
-import { Component, DestroyRef, OnInit, inject, input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, inject, input, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router, RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
@@ -9,6 +9,7 @@ import { PollutionService } from '../services/pollution.service';
 
 // Création (/pollutions/nouvelle) et modification (/pollutions/:id/modifier) d'une pollution
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-pollution-edition',
   imports: [PollutionForm, RouterLink],
   templateUrl: './pollution-edition.html',

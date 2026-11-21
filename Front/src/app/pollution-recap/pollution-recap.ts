@@ -1,9 +1,10 @@
 import { DatePipe, DecimalPipe } from '@angular/common';
-import { Component, Input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, signal } from '@angular/core';
 import { Carte } from '../carte/carte';
 import { Pollution } from '../models/pollution';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-pollution-recap',
   imports: [DatePipe, DecimalPipe, Carte],
   templateUrl: './pollution-recap.html',

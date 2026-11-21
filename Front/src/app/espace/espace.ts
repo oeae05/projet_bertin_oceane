@@ -1,9 +1,10 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 
 // Mise en page des pages réservées aux personnes connectées
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-espace',
   imports: [RouterOutlet, RouterLink, RouterLinkActive],
   templateUrl: './espace.html',

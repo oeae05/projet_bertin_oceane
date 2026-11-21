@@ -1,8 +1,9 @@
-import { Component, Input, model } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, model } from '@angular/core';
 import { ControlContainer, FormsModule, NgForm } from '@angular/forms';
 import { EType } from '../models/e-type';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-champs',
   imports: [FormsModule],
   templateUrl: './champs.html',

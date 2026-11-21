@@ -1,40 +1,56 @@
-import { inject } from '@angular/core';
-import { CanActivateFn, Router, Routes } from '@angular/router';
-import { Connexion } from './connexion/connexion';
-import { Espace } from './espace/espace';
-import { PollutionDetail } from './pollution-detail/pollution-detail';
-import { PollutionEdition } from './pollution-edition/pollution-edition';
-import { PollutionListe } from './pollution-liste/pollution-liste';
-import { AuthService } from './services/auth.service';
-import { SignUp } from './sign-up/sign-up';
-import { UtilisateurListe } from './utilisateur-liste/utilisateur-liste';
+import { Routes } from '@angular/router';
+import { connecteGuard, deconnecteGuard } from './guards/auth.guard';
 
-// Pages réservées aux personnes connectées
-const connecte: CanActivateFn = () =>
-  inject(AuthService).connecte() || inject(Router).parseUrl('/connexion');
-
-// Pages de connexion/inscription inutiles une fois connecté
-const deconnecte: CanActivateFn = () =>
-  !inject(AuthService).connecte() || inject(Router).parseUrl('/pollutions');
-
+// Lazy loading : chaque page est téléchargée seulement quand on y va (loadComponent)
 export const routes: Routes = [
-  { path: 'connexion', component: Connexion, canActivate: [deconnecte], title: 'Connexion' },
-  { path: 'inscription', component: SignUp, canActivate: [deconnecte], title: 'Inscription' },
+  {
+    path: 'connexion',
+    loadComponent: () => import('./connexion/connexion').then((m) => m.Connexion),
+    canActivate: [deconnecteGuard],
+    title: 'Connexion',
+  },
+  {
+    path: 'inscription',
+    loadComponent: () => import('./sign-up/sign-up').then((m) => m.SignUp),
+    canActivate: [deconnecteGuard],
+    title: 'Inscription',
+  },
   {
     path: '',
-    component: Espace,
-    canActivate: [connecte],
+    loadComponent: () => import('./espace/espace').then((m) => m.Espace),
+    canActivate: [connecteGuard],
     children: [
-      { path: 'pollutions', component: PollutionListe, title: 'Pollutions signalées' },
+      {
+        path: 'pollutions',
+        loadComponent: () =>
+          import('./pollution-liste/pollution-liste').then((m) => m.PollutionListe),
+        title: 'Pollutions signalées',
+      },
       // avant 'pollutions/:id', sinon « nouvelle » serait pris pour un id
-      { path: 'pollutions/nouvelle', component: PollutionEdition, title: 'Déclarer une pollution' },
-      { path: 'pollutions/:id', component: PollutionDetail, title: "Détail d'une pollution" },
+      {
+        path: 'pollutions/nouvelle',
+        loadComponent: () =>
+          import('./pollution-edition/pollution-edition').then((m) => m.PollutionEdition),
+        title: 'Déclarer une pollution',
+      },
+      {
+        path: 'pollutions/:id',
+        loadComponent: () =>
+          import('./pollution-detail/pollution-detail').then((m) => m.PollutionDetail),
+        title: "Détail d'une pollution",
+      },
       {
         path: 'pollutions/:id/modifier',
-        component: PollutionEdition,
+        loadComponent: () =>
+          import('./pollution-edition/pollution-edition').then((m) => m.PollutionEdition),
         title: 'Modifier une pollution',
       },
-      { path: 'utilisateurs', component: UtilisateurListe, title: 'Utilisateurs' },
+      {
+        path: 'utilisateurs',
+        loadComponent: () =>
+          import('./utilisateur-liste/utilisateur-liste').then((m) => m.UtilisateurListe),
+        title: 'Utilisateurs',
+      },
       { path: '', pathMatch: 'full', redirectTo: 'pollutions' },
     ],
   },
