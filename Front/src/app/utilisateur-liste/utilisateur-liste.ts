@@ -1,9 +1,10 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
 import { Utilisateur } from '../models/utilisateur';
 import { UtilisateurService } from '../services/utilisateur.service';
 
 // Liste des utilisateurs inscrits (GET /users)
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-utilisateur-liste',
   templateUrl: './utilisateur-liste.html',
 })

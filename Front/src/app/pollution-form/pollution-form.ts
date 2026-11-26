@@ -1,4 +1,4 @@
-import { Component, DestroyRef, Input, inject, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, Input, inject, output, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   AbstractControl,
@@ -50,6 +50,7 @@ const nombreValide: ValidatorFn = (control: AbstractControl): ValidationErrors |
 const arrondir = (n: number) => Math.round(n * 1e6) / 1e6;
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-pollution-form',
   imports: [ReactiveFormsModule, Carte],
   templateUrl: './pollution-form.html',

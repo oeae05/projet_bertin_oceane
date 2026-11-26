@@ -1,8 +1,9 @@
-import { Component, computed, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 // Aperçu OpenStreetMap centré sur un point, sans dépendance externe
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-carte',
   template: `<iframe [src]="url()" [title]="titre()" loading="lazy"></iframe>`,
   styles: `
